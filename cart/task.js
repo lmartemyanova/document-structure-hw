@@ -1,4 +1,6 @@
 const cart = document.querySelector('.cart__products');
+const cartProducts = document.querySelectorAll('.cart__product')
+
 const products = document.querySelectorAll('.product')
 
 for (let index = 0; index < products.length; index++) {
@@ -21,25 +23,21 @@ for (let index = 0; index < products.length; index++) {
     })
 
     add.addEventListener('click', (e) => {
-        for (let index = 0; index < cart.children.length; index++) {
-            if (cart.children[index].getAttribute('data-id') === product.getAttribute('data-id')) {
-                cart.children[index].children[1].textContent = Number(quantityValue.textContent) + Number(cart.children[index].children[1].textContent)
-                return
-            } 
+        const cartProductsArr = Array.from(document.querySelectorAll('.cart__product'))
+
+        const productInCart = cartProductsArr.find((elem) => {
+            return elem.getAttribute('data-id') === product.getAttribute('data-id')
+        })
+
+        if (productInCart) {
+            productInCart.children[1].textContent = Number(quantityValue.textContent) + Number(productInCart.children[1].textContent)
+        } else {
+            cart.insertAdjacentHTML('beforeend', `
+            <div class="cart__product" data-id="${product.getAttribute('data-id')}">
+                <img class="cart__product-image" src="${img.getAttribute('src')}">
+                <div class="cart__product-count">${Number(quantityValue.textContent)}</div>
+            </div>
+            `)
         }
-
-        const newProduct = document.createElement('div')
-        cart.appendChild(newProduct)
-        newProduct.classList.add('cart__product')
-        newProduct.setAttribute('data-id', product.getAttribute('data-id'))
-
-        const imgInCart = document.createElement('img')
-        const quantityInCart = document.createElement('div')
-        newProduct.appendChild(imgInCart)
-        newProduct.appendChild(quantityInCart)
-        imgInCart.classList.add('cart__product-image')
-        imgInCart.setAttribute('src', img.getAttribute('src'))
-        quantityInCart.classList.add('cart__product-count')
-        quantityInCart.textContent = Number(quantityValue.textContent)
     })
 }

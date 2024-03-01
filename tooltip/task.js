@@ -23,11 +23,12 @@ for (let index = 0; index < elemsWithTooltip.length; index++) {
     elemWithTooltip.addEventListener('click', (e) => {
         e.preventDefault()
         
-        elemsWithTooltip.forEach((elem) => {
-            elem.nextElementSibling.classList.remove('tooltip_active')
-        }) 
+        for (let index = 0; index < elemsWithTooltip.length && elemsWithTooltip[index] !== elemWithTooltip; index++) {
+            const element = elemsWithTooltip[index];
+            element.nextElementSibling.classList.remove('tooltip_active') 
+        }
         
-        tooltip.classList.add('tooltip_active')
+        tooltip.classList.toggle('tooltip_active')
 
         tooltip.style.position = 'absolute'
 

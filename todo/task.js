@@ -5,31 +5,39 @@ const tasks = document.getElementById('tasks__list');
 
 addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log('form')
     
-    const task = document.createElement('div')
     // if we need to add new tasks before old
     // if (tasks.children.length == 0) {
-    tasks.appendChild(task)
-    task.classList.add('task')
+    // tasks.appendChild(task)
+    // task.classList.add('task')
     // } else {
     //     tasks.insertBefore(task, tasks.children[0])
     // }
 
-    const taskName = document.createElement('div')
-    task.appendChild(taskName)
-    taskName.classList.add('task__title')
-    taskName.innerText = newTask.value
+    if (!newTask.value.trim()) {
+        document.querySelector('form').reset()
+        return
+    }
+    const title = newTask.value.trim()
 
-    const removeTask = document.createElement('a')
-    task.appendChild(removeTask)
-    removeTask.setAttribute('href', '#')
-    removeTask.classList.add('task__remove')
-    removeTask.innerHTML = '&times;'
+    tasks.insertAdjacentHTML('afterbegin', `
+    <div class="task">
+    <div class="task__title">
+    ${title}
+    </div>
+    <a href="#" class="task__remove">&times;</a>
+    </div>
+    `)
 
     document.querySelector('form').reset()
 
-    removeTask.onclick = () => {
-        task.remove()
+    const removes = document.querySelectorAll('.task__remove')
+    for (let index = 0; index < removes.length; index++) {
+        const task = tasks.children[index];
+        
+        removes[index].addEventListener('click', (e) => {
+            task.remove()
+        })
     }
 })
+
